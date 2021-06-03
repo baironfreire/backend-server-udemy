@@ -90,7 +90,7 @@ app.put('/:id', mdAutenticacion.verificaToken, (request, response) => {
 //===========================================================
 // Crear usuario
 //============================================================
-app.post('/', mdAutenticacion.verificaToken, (request, response) => {
+app.post('/', (request, response) => {
     var body = request.body;
     var usuario = new Usuario({
         nombre: body.nombre,
@@ -104,13 +104,16 @@ app.post('/', mdAutenticacion.verificaToken, (request, response) => {
         if (error) {
             return response.status(400).json({
                 ok: false,
-                mensaje: 'Error al crear  usuario',
+                type: 'error',
+                message: 'Error al crear  usuario',
                 errors: error
             });
         }
 
         response.status(201).json({
             ok: true,
+            type: 'success',
+            message: 'Usuario creado',
             usuario: usuarioDB
         });
     });
@@ -127,7 +130,8 @@ app.delete('/:id', mdAutenticacion.verificaToken, (request, response) => {
         if (error) {
             return response.status(500).json({
                 ok: false,
-                mensaje: 'Error al borrar  usuario',
+                type: 'error',
+                message: 'Error al borrar  usuario',
                 errors: error
             });
         }
@@ -135,13 +139,16 @@ app.delete('/:id', mdAutenticacion.verificaToken, (request, response) => {
         if (!usuarioRemove) {
             return response.status(400).json({
                 ok: false,
-                mensaje: 'No existe un usuario con ese id ',
+                type: 'info',
+                message: 'No existe un usuario con ese id ',
                 errors: { message: 'No existe un suario con ese id' }
             });
         }
 
         response.status(200).json({
             ok: true,
+            type: 'success',
+            message: 'Se encontro información del usuario',
             usuario: usuarioRemove
         });
     });

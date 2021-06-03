@@ -15,8 +15,9 @@ app.post('/', (request, response) => {
 
         if (error) {
             return reponse.status(500).json({
-                o: false,
-                mensaje: 'Error al buscar usuario',
+                ok: false,
+                type: 'error',
+                message: 'Error al buscar usuario',
                 errors: error
             });
         }
@@ -24,7 +25,8 @@ app.post('/', (request, response) => {
         if (!usuarioDB) {
             return response.status(400).json({
                 ok: false,
-                mensaje: 'Credenciales incorrectas - email',
+                type: 'error',
+                message: 'Credenciales incorrectas - email',
                 errors: error
             });
         }
@@ -32,7 +34,8 @@ app.post('/', (request, response) => {
         if (!bcrypt.compareSync(body.password, usuarioDB.password)) {
             return response.status(400).json({
                 ok: false,
-                mensaje: 'Credenciales incorrectas - password',
+                type: 'error',
+                message: 'Credenciales incorrectas - password',
                 errors: error
             });
         }
@@ -43,6 +46,8 @@ app.post('/', (request, response) => {
 
         response.status(200).json({
             ok: true,
+            type: 'success',
+            message: 'Usuario autenticado con éxito',
             usuario: usuarioDB,
             token: token,
             id: usuarioDB._id
